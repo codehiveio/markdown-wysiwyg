@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CodeHive's Markdown WYSIWYG toolbar</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="form form-stacked">
+      <div class="form-block">
+        <label class="label" for="board_content">Content</label>
+        <div class="form-controls">
+          <span class="button ion-code addCode-editor" title="Code block <pre><code>"></span>
+          <span class="button ion-code-working addInlineCode-editor" title="Inline code <code>"></span>
+          <span class="button addStrong-editor" title="Strong <strong>"><strong>b</strong></span>
+          <span class="button addEmphasis-editor" title="Emphasis <em>"><strong><em>i</em></strong></span>
+        </div>
+        <textarea placeholder="Ask a programming question or share a tip with other developers. Markdown is supported." class="textarea-tall" id="board_content"></textarea>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.9.2/coffee-script.min.js"></script>
+  <script src="assets/scripts.coffee"></script>
+</body>
+</html>
