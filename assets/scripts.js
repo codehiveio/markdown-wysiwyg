@@ -1,43 +1,48 @@
 (function() {
-  var codeTarget, emphasisTarget, inlineCodeTarget, matchString, strongTarget;
+  var addMarkdown, buttonFunctions, buttonTypes, matchString;
 
-  codeTarget = "Enter code here";
+  buttonTypes = {
+    addCode: "Enter code here",
+    addInlineCode: "Enter inline code here",
+    addStrong: "Strong text",
+    addEmphasis: "Emphasized text",
+    addLink: "https://www.codehive.io"
+  };
 
-  strongTarget = "Strong text";
+  buttonFunctions = {
+    addCode: "```\n" + buttonTypes.addCode + "\n```\n\n",
+    addInlineCode: "`" + buttonTypes.addInlineCode + "` ",
+    addStrong: "**" + buttonTypes.addStrong + "** ",
+    addEmphasis: "*" + buttonTypes.addEmphasis + "* ",
+    addLink: "[Link title](" + buttonTypes.addLink + ") "
+  };
 
-  emphasisTarget = "Emphasized text";
-
-  inlineCodeTarget = "Enter inline code here";
-
-  matchString = function(target) {
-    var containsString, targetEnd, textArea, textAreaText;
-    textArea = document.getElementById("board_content");
-    textAreaText = textArea.value;
-    containsString = textAreaText.indexOf(target);
-    if (containsString > -1) {
-      targetEnd = target.length + containsString;
-      return textArea.setSelectionRange(containsString, targetEnd);
+  matchString = function(target, textAreaElement, limit) {
+    var highlight, textArea;
+    textArea = document.getElementById(textAreaElement.attr('id'));
+    highlight = textArea.value.lastIndexOf(target, limit);
+    if (highlight >= 0) {
+      textArea.focus();
+      textArea.selectionStart = highlight;
+      return textArea.selectionEnd = highlight + target.length;
     }
   };
 
-  $('.addCode-editor').on('click', function() {
-    $('#board_content').val($('#board_content').val() + '```\n' + codeTarget + '\n```\n\n');
-    return matchString(codeTarget);
-  });
+  addMarkdown = function(buttonType, textArea) {
+    var caretPosition, text;
+    text = textArea.val();
+    caretPosition = document.getElementById(textArea.attr('id')).selectionStart;
+    if (buttonType in buttonTypes) {
+      textArea.val(text.substring(0, caretPosition) + buttonFunctions[buttonType] + text.substring(caretPosition, text.length - 1));
+      return matchString(buttonTypes[buttonType], textArea, caretPosition + buttonTypes[buttonType].length - 1);
+    }
+  };
 
-  $('.addStrong-editor').on('click', function() {
-    $('#board_content').val($('#board_content').val() + '**' + strongTarget + '** ');
-    return matchString(strongTarget);
-  });
-
-  $('.addEmphasis-editor').on('click', function() {
-    $('#board_content').val($('#board_content').val() + '*' + emphasisTarget + '* ');
-    return matchString(emphasisTarget);
-  });
-
-  $('.addInlineCode-editor').on('click', function() {
-    $('#board_content').val($('#board_content').val() + '`' + inlineCodeTarget + '` ');
-    return matchString(inlineCodeTarget);
+  $('.form-controls .button').on('click', function() {
+    var buttonType, textArea;
+    buttonType = $(this).data('button-type');
+    textArea = $(this).parent().parent().find('textarea');
+    return addMarkdown(buttonType, textArea);
   });
 
 }).call(this);

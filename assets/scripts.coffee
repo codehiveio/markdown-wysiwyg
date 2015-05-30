@@ -1,28 +1,33 @@
-codeTarget = "Enter code here"
-strongTarget = "Strong text"
-emphasisTarget = "Emphasized text"
-inlineCodeTarget = "Enter inline code here"
+buttonTypes = 
+  addCode: "Enter code here"
+  addInlineCode: "Enter inline code here"
+  addStrong: "Strong text"
+  addEmphasis: "Emphasized text"
+  addLink: "https://www.codehive.io"
 
-matchString = (target)->
-  textArea = document.getElementById("board_content")
-  textAreaText = textArea.value
-  containsString = textAreaText.indexOf(target)
-  if(containsString > -1)
-    targetEnd = target.length + containsString
-    textArea.setSelectionRange(containsString, targetEnd)
+buttonFunctions =
+  addCode: "```\n#{buttonTypes.addCode}\n```\n\n"
+  addInlineCode: "`#{buttonTypes.addInlineCode}` "
+  addStrong: "**#{buttonTypes.addStrong}** "
+  addEmphasis: "*#{buttonTypes.addEmphasis}* "
+  addLink: "[Link title](#{buttonTypes.addLink}) "
 
-$('.addCode-editor').on 'click', () ->
-  $('#board_content').val($('#board_content').val() + '```\n' + codeTarget + '\n```\n\n')
-  matchString(codeTarget)
+matchString = (target, textAreaElement, limit) ->
+  textArea = document.getElementById(textAreaElement.attr('id'))
+  highlight = textArea.value.lastIndexOf(target, limit)
+  if highlight >= 0
+    textArea.focus()
+    textArea.selectionStart = highlight
+    textArea.selectionEnd = highlight + target.length
 
-$('.addStrong-editor').on 'click', () ->
-  $('#board_content').val($('#board_content').val() + '**' + strongTarget + '** ')
-  matchString(strongTarget)
+addMarkdown = (buttonType, textArea) ->
+  text = textArea.val()
+  caretPosition = document.getElementById(textArea.attr('id')).selectionStart
+  if buttonType of buttonTypes
+    textArea.val(text.substring(0, caretPosition) + buttonFunctions[buttonType] + text.substring(caretPosition, text.length - 1))
+    matchString(buttonTypes[buttonType], textArea, caretPosition + buttonTypes[buttonType].length - 1)
 
-$('.addEmphasis-editor').on 'click', () ->
-  $('#board_content').val($('#board_content').val() + '*' + emphasisTarget + '* ')
-  matchString(emphasisTarget)
-
-$('.addInlineCode-editor').on 'click', () ->
-  $('#board_content').val($('#board_content').val() + '`' + inlineCodeTarget + '` ')
-  matchString(inlineCodeTarget)
+$('.form-controls .button').on 'click', () ->
+  buttonType = $(this).data('button-type')
+  textArea = $(this).parent().parent().find('textarea')
+  addMarkdown(buttonType, textArea)

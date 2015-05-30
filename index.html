@@ -12,10 +12,11 @@
       <div class="form-block">
         <label class="label" for="board_content">Content</label>
         <div class="form-controls">
-          <span class="button ion-code addCode-editor" title="Code block <pre><code>"></span>
-          <span class="button ion-code-working addInlineCode-editor" title="Inline code <code>"></span>
-          <span class="button addStrong-editor" title="Strong <strong>"><strong>b</strong></span>
-          <span class="button addEmphasis-editor" title="Emphasis <em>"><strong><em>i</em></strong></span>
+          <span class="button ion-code" title="Code block <pre><code>" data-button-type="addCode"></span>
+          <span class="button ion-code-working" title="Inline code <code>" data-button-type="addInlineCode"></span>
+          <span class="button" title="Strong <strong>" data-button-type="addStrong"><strong>b</strong></span>
+          <span class="button" title="Emphasis <em>" data-button-type="addEmphasis"><strong><em>i</em></strong></span>
+          <span class="button ion-link" title="Link <a>" data-button-type="addLink"></span>
         </div>
         <textarea placeholder="Ask a programming question or share a tip with other developers. Markdown is supported." class="textarea-tall" id="board_content"></textarea>
       </div>
